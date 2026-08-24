@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "extensionId": "irodori.starrocks",
+  "visibility": "public",
+  "version": "0.1.0",
+  "connector": {
+    "id": "starrocks.connector",
+    "engine": "starrocks",
+    "label": "StarRocks",
+    "aliases": [
+      "starrocks",
+      "StarRocks"
+    ],
+    "defaultPort": 9030,
+    "wire": "mysql",
+    "module": "starrocks.driver",
+    "features": [
+      "metadata",
+      "sql",
+      "explain",
+      "queryTemplates",
+      "visualization"
+    ]
+  },
+  "connection": {
+    "endpoint": {
+      "modes": [
+        "hostPort",
+        "connectionString"
+      ],
+      "defaultPort": 9030,
+      "fields": [
+        {
+          "id": "host",
+          "label": "Host",
+          "type": "string",
+          "profileField": "host",
+          "required": true
+        },
+        {
+          "id": "port",
+          "label": "Port",
+          "type": "number",
+          "profileField": "port",
+          "default": 9030
+        },
+        {
+          "id": "database",
+          "label": "Database",
+          "type": "string",
+          "profileField": "database"
+        }
+      ]
+    },
+    "authMethods": [
+      {
+        "id": "none",
+        "label": "No authentication",
+        "kind": "none",
+        "secretPurposes": [],
+        "fields": []
+      },
+      {
+        "id": "userPassword",
+        "label": "User/password",
+        "kind": "userPassword",
+        "secretPurposes": [
+          "password"
+        ],
+        "fields": [
+          {
+            "id": "user",
+            "label": "User",
+            "type": "string",
+            "profileField": "user"
+          },
+          {
+            "id": "password",
+            "label": "Password",
+            "type": "secret",
+            "secretPurpose": "password",
+            "profileField": "password"
+          }
+        ]
+      },
+      {
+        "id": "connectionString",
+        "label": "Connection string / DSN",
+        "kind": "connectionString",
+        "secretPurposes": [
+          "password"
+        ],
+        "fields": [
+          {
+            "id": "url",
+            "label": "Connection URL or DSN",
+            "type": "uri",
+            "profileField": "url",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "secretPurposes": [
+      "password"
+    ],
+    "tls": {
+      "supported": true,
+      "requiredByDefault": false,
+      "modes": [
+        "disable",
+        "prefer",
+        "require",
+        "verifyCa"
+      ],
+      "fields": [
+        {
+          "id": "caCertificate",
+          "label": "CA certificate",
+          "type": "pem"
+        }
+      ]
+    }
+  }
+}

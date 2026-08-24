@@ -1,0 +1,349 @@
+{
+  "$schema": "https://irodori.dev/schemas/irodori.extension.schema.json",
+  "manifestVersion": 1,
+  "id": "irodori.starrocks",
+  "name": "StarRocks Connector",
+  "version": "0.1.0",
+  "publisher": "irodori",
+  "description": "StarRocks Connector contributes the StarRocks database connector through the native connector ABI. The frontend speaks the MySQL wire protocol, so the connector talks to the FE query port and reads external catalogs alongside the internal one.",
+  "license": "MIT OR 0BSD",
+  "repository": "https://github.com/irodori-table/irodori-extension-starrocks",
+  "apiVersion": "0.1",
+  "runtime": "native",
+  "entry": "dist/native",
+  "permissions": [
+    "connections:read",
+    "connections:write",
+    "queries:run",
+    "metadata:read",
+    "native",
+    "connectors"
+  ],
+  "contributes": {
+    "connectors": [
+      {
+        "id": "starrocks.connector",
+        "engine": "starrocks",
+        "label": "StarRocks",
+        "aliases": [
+          "starrocks",
+          "StarRocks"
+        ],
+        "defaultPort": 9030,
+        "wire": "mysql",
+        "module": "starrocks.driver",
+        "features": [
+          "metadata",
+          "sql",
+          "explain",
+          "queryTemplates",
+          "visualization"
+        ],
+        "connection": {
+          "schemaVersion": 1,
+          "inferEnvironmentFrom": [
+            "name",
+            "id",
+            "host",
+            "database",
+            "url"
+          ],
+          "compatibility": {
+            "addsRequiredProfileFields": false,
+            "acceptsExistingProfiles": true
+          },
+          "defaults": {
+            "engine": "starrocks",
+            "wire": "mysql",
+            "port": 9030,
+            "readOnly": false
+          },
+          "endpoint": {
+            "modes": [
+              "hostPort",
+              "connectionString"
+            ],
+            "defaultPort": 9030,
+            "fields": [
+              {
+                "id": "host",
+                "label": "Host",
+                "type": "string",
+                "profileField": "host",
+                "required": true
+              },
+              {
+                "id": "port",
+                "label": "Port",
+                "type": "number",
+                "profileField": "port",
+                "default": 9030
+              },
+              {
+                "id": "database",
+                "label": "Database",
+                "type": "string",
+                "profileField": "database"
+              }
+            ]
+          },
+          "profileFields": [
+            {
+              "id": "id",
+              "label": "Connection ID",
+              "type": "string",
+              "profileField": "id",
+              "required": true
+            },
+            {
+              "id": "url",
+              "label": "Connection URL or DSN",
+              "type": "uri",
+              "profileField": "url"
+            },
+            {
+              "id": "host",
+              "label": "Host",
+              "type": "string",
+              "profileField": "host",
+              "required": true
+            },
+            {
+              "id": "port",
+              "label": "Port",
+              "type": "number",
+              "profileField": "port",
+              "default": 9030
+            },
+            {
+              "id": "user",
+              "label": "User",
+              "type": "string",
+              "profileField": "user"
+            },
+            {
+              "id": "database",
+              "label": "Database",
+              "type": "string",
+              "profileField": "database"
+            },
+            {
+              "id": "readOnly",
+              "label": "Read-only connection",
+              "type": "boolean",
+              "profileField": "readOnly",
+              "default": false
+            },
+            {
+              "id": "options",
+              "label": "Driver options",
+              "type": "map",
+              "profileField": "options"
+            }
+          ],
+          "authMethods": [
+            {
+              "id": "none",
+              "label": "No authentication",
+              "kind": "none",
+              "secretPurposes": [],
+              "fields": []
+            },
+            {
+              "id": "userPassword",
+              "label": "User/password",
+              "kind": "userPassword",
+              "secretPurposes": [
+                "password"
+              ],
+              "fields": [
+                {
+                  "id": "user",
+                  "label": "User",
+                  "type": "string",
+                  "profileField": "user"
+                },
+                {
+                  "id": "password",
+                  "label": "Password",
+                  "type": "secret",
+                  "secretPurpose": "password",
+                  "profileField": "password"
+                }
+              ]
+            },
+            {
+              "id": "connectionString",
+              "label": "Connection string / DSN",
+              "kind": "connectionString",
+              "secretPurposes": [
+                "password"
+              ],
+              "fields": [
+                {
+                  "id": "url",
+                  "label": "Connection URL or DSN",
+                  "type": "uri",
+                  "profileField": "url",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "secretPurposes": [
+            "password"
+          ],
+          "tls": {
+            "supported": true,
+            "requiredByDefault": false,
+            "modes": [
+              "disable",
+              "prefer",
+              "require",
+              "verifyCa"
+            ],
+            "fields": [
+              {
+                "id": "caCertificate",
+                "label": "CA certificate",
+                "type": "pem"
+              }
+            ]
+          },
+          "transports": [
+            "direct",
+            "sshTunnel",
+            "socks5Proxy",
+            "httpConnectProxy",
+            "proxyChain"
+          ],
+          "optionNamespaces": [
+            "profile.options",
+            "driver",
+            "tls",
+            "network",
+            "starrocks"
+          ],
+          "customDriverOptions": true
+        },
+        "experience": {
+          "schemaVersion": 1,
+          "domains": [
+            "warehouse"
+          ],
+          "inspiredBy": [
+            "StarRocks external catalogs",
+            "Iceberg metadata tables",
+            "shared-nothing and shared-data deployments"
+          ],
+          "resultViews": [
+            "table",
+            "worksheet",
+            "queryProfile"
+          ],
+          "objectTypes": [
+            "catalogs",
+            "databases",
+            "tables",
+            "columns",
+            "views",
+            "materializedViews"
+          ],
+          "workflows": [
+            {
+              "id": "external-catalogs",
+              "label": "External catalogs",
+              "description": "List the catalogs the frontend has attached and switch between them.",
+              "resultView": "table",
+              "templateIds": [
+                "starrocks-show-catalogs"
+              ]
+            },
+            {
+              "id": "iceberg-metadata",
+              "label": "Iceberg metadata",
+              "description": "Read snapshots and refs off an Iceberg table in an external catalog.",
+              "resultView": "table",
+              "templateIds": [
+                "starrocks-iceberg-snapshots"
+              ]
+            },
+            {
+              "id": "time-travel",
+              "label": "Time travel",
+              "description": "Query an older snapshot, branch, or tag of an Iceberg table.",
+              "resultView": "table",
+              "templateIds": [
+                "starrocks-iceberg-timetravel"
+              ]
+            }
+          ],
+          "queryTemplates": [
+            {
+              "id": "starrocks-show-catalogs",
+              "label": "Show catalogs",
+              "language": "sql",
+              "description": "List attached catalogs, then switch to one.",
+              "insertText": "SHOW CATALOGS;\n\n-- SET CATALOG <catalog_name>;\n-- SHOW DATABASES;",
+              "parameters": [],
+              "resultView": "table"
+            },
+            {
+              "id": "starrocks-iceberg-snapshots",
+              "label": "Iceberg snapshots",
+              "language": "sql",
+              "description": "Read the snapshot log of an Iceberg table.",
+              "insertText": "SELECT committed_at, snapshot_id, parent_id, operation\nFROM <catalog>.<database>.<table>$snapshots\nORDER BY committed_at DESC\nLIMIT 20;",
+              "parameters": [],
+              "resultView": "table"
+            },
+            {
+              "id": "starrocks-iceberg-timetravel",
+              "label": "Time travel",
+              "language": "sql",
+              "description": "Query an older snapshot, branch, or tag.",
+              "insertText": "SELECT * FROM <catalog>.<database>.<table>\nVERSION AS OF 12345\nLIMIT 100;\n\n-- SELECT * FROM <catalog>.<database>.<table> TIMESTAMP AS OF '1986-10-26 01:21:00';",
+              "parameters": [],
+              "resultView": "table"
+            }
+          ],
+          "inspectorHints": [
+            {
+              "id": "catalog-origin",
+              "label": "Catalog origin",
+              "description": "Show whether a database comes from the internal catalog or an attached external one."
+            },
+            {
+              "id": "table-format",
+              "label": "Table format",
+              "description": "Surface the table format behind an external catalog table."
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "capabilities": {
+    "nativeModules": [
+      {
+        "id": "starrocks.driver",
+        "path": "dist/native",
+        "platforms": [
+          "windowsX64",
+          "windowsArm64",
+          "macosX64",
+          "macosArm64",
+          "linuxX64",
+          "linuxArm64"
+        ]
+      }
+    ]
+  },
+  "dev": {
+    "watch": [
+      "src",
+      "connector.config.json",
+      "irodori.extension.json"
+    ]
+  }
+}
