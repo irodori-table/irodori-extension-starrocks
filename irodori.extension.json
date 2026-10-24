@@ -3,7 +3,7 @@
   "manifestVersion": 1,
   "id": "irodori.starrocks",
   "name": "StarRocks Connector",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "irodori",
   "description": "StarRocks Connector contributes the StarRocks database connector through the native connector ABI. The frontend speaks the MySQL wire protocol, so the connector talks to the FE query port and reads external catalogs alongside the internal one.",
   "license": "MIT OR 0BSD",

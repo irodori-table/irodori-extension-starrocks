@@ -388,7 +388,7 @@ dependencies = [
 
 [[package]]
 name = "irodori-extension-starrocks"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "irodori-connector-abi",
  "mysql",
